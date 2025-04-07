@@ -1,17 +1,90 @@
-# PubSub Emulator UI
-This application is meant to assist in local development of software related to Google Pub/Sub. This will allow one to view and create pubsub messages as well as create topics + pull subscriptions on a locally hosted instance of the pubsub emulator
+# Pub/Sub Emulator UI
 
-## Quickstart
+Part of [gcp-pub-sub-boilerplate](https://github.com/aemal/gcp-pub-sub-boilerplate)
 
-1. Utilize docker to run the pubsub emulator ui
-   ```
-   docker run -p 4200:80 ghcr.io/neoscript/pubsub-emulator-ui:latest
-   ```
-   - Note if you want to also spin up an instance of the pubsub emulator take a look at the [`docker-compose.yml`](https://github.com/NeoScript/pubsub-emulator-ui/blob/main/docker-compose.yml) file in this project's root 😉
-2. Add the project you would like to track
-   ![Screenshot from 2024-02-09 09-15-28](https://github.com/NeoScript/pubsub-emulator-ui/assets/3144162/7eab63e9-361e-45f4-9d29-714e6c286bb3)
-3. Now add topics/subscribers and send/receive messages as you would like 😄
-   ![Screenshot from 2024-02-09 09-16-26](https://github.com/NeoScript/pubsub-emulator-ui/assets/3144162/a5b6523a-30e8-4cdd-a4e6-620c58152067)
+> **Credit**: This UI component is forked from [NeoScript/pubsub-emulator-ui](https://github.com/NeoScript/pubsub-emulator-ui), an excellent project that provides visibility into the Google Cloud Pub/Sub emulator. The original project has 83+ stars and 21+ forks on GitHub. We've adapted it for our boilerplate setup while maintaining the core functionality that makes it great.
+
+## Purpose
+
+This is a web-based user interface for monitoring and managing Google Cloud Pub/Sub emulator resources. It provides a visual interface for viewing topics, subscriptions, and messages in your local development environment.
+
+### Original Project Features
+
+As described by the original author:
+- Visual tooling for Google Pub/Sub emulator
+- Ability to view and create Pub/Sub messages
+- Management of topics and pull subscriptions
+- Improved message handling over previous solutions
+- Docker support for easy deployment
+
+### Our Implementation
+
+We've integrated this UI with our boilerplate setup, providing:
+- Angular-based web interface
+- Real-time topic and subscription monitoring
+- Message inspection and management
+- Integration with local Pub/Sub emulator
+- CORS proxy support for local development
+
+### Features
+
+- Angular-based web interface
+- Real-time topic and subscription monitoring
+- Message inspection and management
+- Integration with local Pub/Sub emulator
+- CORS proxy support for local development
+
+### Components
+
+- **Topic List**: View and manage Pub/Sub topics
+- **Subscription List**: View and manage subscriptions for each topic
+- **Message Viewer**: Inspect message contents and metadata
+- **Real-time Updates**: Live updates when new messages arrive
+
+## Setup
+
+1. Install dependencies:
+```bash
+cd webapp
+npm install
+```
+
+2. Start the CORS proxy:
+```bash
+npm install -g local-cors-proxy
+lcp --proxyUrl http://localhost:8790 --proxyPartial 'proxy'
+```
+
+3. Start the development server:
+```bash
+npm start
+```
+
+4. Open the UI:
+```bash
+http://localhost:4200
+```
+
+## Configuration
+
+The UI can be configured through environment files:
+
+`src/environments/environment.ts`:
+```typescript
+export const environment = {
+  production: false,
+  pubsubEmulator: {
+    host: 'http://localhost:8010',
+    projectId: 'your-project-id'
+  }
+};
+```
+
+## Troubleshooting
+
+1. **404 Not Found**: Ensure the CORS proxy is running with correct parameters
+2. **No Topics Showing**: Verify the emulator is running and has topics created
+3. **Connection Issues**: Check the browser console for CORS or network errors
 
 ### Motivations
  - The current Google Pub/Sub emulator does not have any visual tooling
@@ -49,3 +122,9 @@ This application is meant to assist in local development of software related to 
 LICENSE: MIT
 
 All improvements and suggestions are welcome!
+
+## Credits and License
+
+- Original Project: [NeoScript/pubsub-emulator-ui](https://github.com/NeoScript/pubsub-emulator-ui)
+- License: MIT
+- Original Author's Motivation: Created to provide better visual tooling for the Google Pub/Sub emulator and improve upon existing solutions.

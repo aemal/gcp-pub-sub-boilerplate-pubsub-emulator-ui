@@ -28,16 +28,23 @@ export class SubscriptionDetailsComponent implements OnInit {
   }
 
   pullMessages(): void {
-    console.log('trying to pull messages')
-
-    this.pubsub.fetchMessages(this.subscriptionPath!, 10)
+    console.log('Pulling messages for subscription:', this.subscriptionPath);
+    if (!this.subscriptionPath) return;
+    
+    this.pubsub.fetchMessages(this.subscriptionPath, 10)
       .pipe(map(results => results.map(msg => {
         msg.message.data = this.convertMessageData(msg.message.data)
         return msg
       })))
-      .subscribe(results => {
-        this.messages = results
-      })
+      .subscribe({
+        next: (messages) => {
+          console.log('Received messages:', messages);
+          this.messages = messages;
+        },
+        error: (error) => {
+          console.error('Error pulling messages:', error);
+        }
+      });
   }
 
   convertMessageData(encodedInput: string) {
