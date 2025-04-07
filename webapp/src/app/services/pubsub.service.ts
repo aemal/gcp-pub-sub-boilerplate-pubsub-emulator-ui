@@ -124,15 +124,19 @@ export class PubsubService {
 
   fetchMessages(subPath: string, maxMessages: number) {
     const url = this.getApiUrl(`${subPath}:pull`);
-    console.log('Pulling messages from:', url, { maxMessages });
+    console.log('Pulling messages from:', url);
     return this.http
-      .post<{ receivedMessages: ReceivedMessage[] }>(
+      .post<{ receivedMessages?: ReceivedMessage[] }>(
         url,
-        { returnImmediately: true, maxMessages }
+        {
+          maxMessages: maxMessages,
+          returnImmediately: false,
+          subscription: subPath
+        }
       ).pipe(
         map(incoming => {
           console.log('Pull response:', incoming);
-          return incoming.receivedMessages ?? [];
+          return incoming?.receivedMessages || [];
         })
       );
   }
